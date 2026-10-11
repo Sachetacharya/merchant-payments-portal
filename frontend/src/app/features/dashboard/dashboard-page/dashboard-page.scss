@@ -1,0 +1,85 @@
+.dashboard-page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  h1 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+}
+
+.state-message {
+  text-align: center;
+  padding: 32px 16px;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.quick-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--mat-sys-primary);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-left: 4px solid var(--mat-sys-outline-variant);
+}
+
+.stat-count {
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.stat-card.total {
+  border-left-color: var(--mat-sys-primary);
+}
+
+.stat-card.status-draft {
+  border-left-color: #757575;
+}
+
+.stat-card.status-submitted {
+  border-left-color: #1565c0;
+}
+
+.stat-card.status-under_review {
+  border-left-color: #f57f17;
+}
+
+.stat-card.status-approved {
+  border-left-color: #2e7d32;
+}
+
+.stat-card.status-rejected {
+  border-left-color: #c62828;
+}

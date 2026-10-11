@@ -1,0 +1,26 @@
+.masked-field {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 0;
+}
+
+.masked-field-label {
+  min-width: 140px;
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 0.85rem;
+}
+
+.masked-field-value {
+  font-family: 'Roboto Mono', monospace;
+  letter-spacing: 0.02em;
+
+  &.is-revealed {
+    color: var(--mat-sys-error);
+    font-weight: 600;
+  }
+}
+
+.reveal-toggle {
+  margin-left: auto;
+}

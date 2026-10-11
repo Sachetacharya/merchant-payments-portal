@@ -1,0 +1,78 @@
+<header class="toolbar">
+  <div class="mobile-nav-wrapper">
+    <button
+      #mobileNavTrigger
+      type="button"
+      class="btn btn-icon menu-trigger"
+      aria-label="Open navigation menu"
+      aria-haspopup="menu"
+      [attr.aria-expanded]="openMenu() === 'mobile-nav'"
+      (click)="toggleMenu('mobile-nav')"
+    >
+      <span class="icon">menu</span>
+    </button>
+    @if (openMenu() === 'mobile-nav') {
+      <div class="menu-popover" role="menu" (keydown.escape)="closeMenuOnEscape()">
+        <a class="menu-popover-item" role="menuitem" routerLink="/dashboard" (click)="closeMenu()">
+          <span class="icon">dashboard</span>
+          <span>Dashboard</span>
+        </a>
+        <a class="menu-popover-item" role="menuitem" routerLink="/applications" (click)="closeMenu()">
+          <span class="icon">list_alt</span>
+          <span>Applications</span>
+        </a>
+        @if (role() === Role.Sales) {
+          <a class="menu-popover-item" role="menuitem" routerLink="/applications/new" (click)="closeMenu()">
+            <span class="icon">add</span>
+            <span>New application</span>
+          </a>
+        }
+      </div>
+    }
+  </div>
+
+  <span class="brand">
+    <span class="brand-full">Merchant Payments Portal</span>
+    <span class="brand-short">MPP</span>
+  </span>
+
+  <nav class="nav-links">
+    <a class="btn" routerLink="/dashboard">Dashboard</a>
+    <a class="btn" routerLink="/applications">Applications</a>
+    @if (role() === Role.Sales) {
+      <a class="btn" routerLink="/applications/new">New Application</a>
+    }
+  </nav>
+
+  <span class="spacer"></span>
+
+  @if (currentUser(); as user) {
+    <div class="user-menu-wrapper">
+      <button
+        #userMenuTrigger
+        type="button"
+        class="btn user-menu-trigger menu-trigger"
+        aria-haspopup="menu"
+        [attr.aria-expanded]="openMenu() === 'user'"
+        [attr.aria-label]="'Account menu for ' + user.name"
+        (click)="toggleMenu('user')"
+      >
+        <span class="icon">account_circle</span>
+        <span class="user-name">{{ user.name }}</span>
+        <span class="role-chip">{{ user.role }}</span>
+      </button>
+      @if (openMenu() === 'user') {
+        <div class="menu-popover" role="menu" (keydown.escape)="closeMenuOnEscape()">
+          <button type="button" class="menu-popover-item" role="menuitem" (click)="logout()">
+            <span class="icon">logout</span>
+            <span>Sign out</span>
+          </button>
+        </div>
+      }
+    </div>
+  }
+</header>
+
+<main class="content">
+  <router-outlet />
+</main>

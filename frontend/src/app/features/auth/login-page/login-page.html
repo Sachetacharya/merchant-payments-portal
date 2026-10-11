@@ -1,0 +1,50 @@
+<div class="login-page">
+  <div class="card login-card">
+    <h1 class="login-title">Merchant Payments Portal</h1>
+    <p class="login-subtitle">Sign in to continue</p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" autocomplete="username" />
+        @if (form.controls.email.invalid && form.controls.email.touched) {
+          <mat-error>Enter a valid email address.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          [type]="hidePassword() ? 'password' : 'text'"
+          formControlName="password"
+          autocomplete="current-password"
+        />
+        <button
+          matSuffix
+          type="button"
+          class="btn btn-icon password-toggle"
+          [attr.aria-label]="hidePassword() ? 'Show password' : 'Hide password'"
+          (click)="togglePasswordVisibility()"
+        >
+          <span class="icon">{{ hidePassword() ? 'visibility_off' : 'visibility' }}</span>
+        </button>
+        @if (form.controls.password.invalid && form.controls.password.touched) {
+          <mat-error>Password must be at least 8 characters.</mat-error>
+        }
+      </mat-form-field>
+
+      @if (errorMessage(); as message) {
+        <p class="error-message" role="alert">{{ message }}</p>
+      }
+
+      <button type="submit" class="btn btn-filled full-width" [disabled]="isSubmitting()">
+        @if (isSubmitting()) {
+          <span class="spinner"></span>
+        } @else {
+          Sign in
+        }
+      </button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,150 @@
+@if (state(); as s) {
+  @switch (s.status) {
+    @case ('loading') {
+      <mat-progress-bar mode="indeterminate" />
+    }
+    @case ('error') {
+      <p class="state-message error" role="alert">Couldn't load this application.</p>
+    }
+    @case ('success') {
+      <div class="detail-page">
+        <header class="detail-header">
+          <button mat-icon-button routerLink="/applications" aria-label="Back to applications" matTooltip="Back to applications">
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+          <h1>{{ s.application.legalBusinessName || 'Untitled application' }}</h1>
+          <span class="status-chip">{{ s.application.status.replace('_', ' ') }}</span>
+        </header>
+
+        <div class="sections">
+          <div class="card">
+            <h2 class="card-title">Business</h2>
+            <p><strong>Type:</strong> {{ s.application.businessType || '—' }}</p>
+            <p><strong>Website:</strong> {{ s.application.website || '—' }}</p>
+            <app-masked-field
+              label="Registration number"
+              [maskedValue]="s.application.registrationNumber"
+              [revealedValue]="revealedValues()['registrationNumber'] ?? null"
+              [canReveal]="canReveal()"
+              [isRevealing]="revealingField() === 'registrationNumber'"
+              (revealRequested)="onReveal(s.application.id, 'registrationNumber')"
+            />
+          </div>
+
+          <div class="card">
+            <h2 class="card-title">Owner</h2>
+            <p><strong>Name:</strong> {{ s.application.ownerFullName || '—' }}</p>
+            <p><strong>Email:</strong> {{ s.application.ownerEmail || '—' }}</p>
+            <p><strong>Phone:</strong> {{ s.application.ownerPhone || '—' }}</p>
+            <app-masked-field
+              label="NID"
+              [maskedValue]="s.application.ownerNid"
+              [revealedValue]="revealedValues()['ownerNid'] ?? null"
+              [canReveal]="canReveal()"
+              [isRevealing]="revealingField() === 'ownerNid'"
+              (revealRequested)="onReveal(s.application.id, 'ownerNid')"
+            />
+          </div>
+
+          <div class="card">
+            <h2 class="card-title">Banking</h2>
+            <p><strong>Bank name:</strong> {{ s.application.bankName || '—' }}</p>
+            <p><strong>Branch:</strong> {{ s.application.bankBranch || '—' }}</p>
+            <app-masked-field
+              label="Account number"
+              [maskedValue]="s.application.bankAccountNumber"
+              [revealedValue]="revealedValues()['bankAccountNumber'] ?? null"
+              [canReveal]="canReveal()"
+              [isRevealing]="revealingField() === 'bankAccountNumber'"
+              (revealRequested)="onReveal(s.application.id, 'bankAccountNumber')"
+            />
+          </div>
+
+          <div class="card">
+            <h2 class="card-title">Processing estimate</h2>
+            <p>
+              <strong>Est. monthly volume:</strong>
+              {{ s.application.estimatedMonthlyVolume ? 'NRs ' + (s.application.estimatedMonthlyVolume | number) : '—' }}
+            </p>
+            <p>
+              <strong>Average transaction size:</strong>
+              {{ s.application.averageTransactionSize ? (s.application.averageTransactionSize | number) : '—' }}
+            </p>
+          </div>
+
+          @if (canAssign(s.application)) {
+            <div class="card">
+              <h2 class="card-title">Assign reviewer</h2>
+              <form [formGroup]="assignForm" (ngSubmit)="assign(s.application.id)">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Reviewer</mat-label>
+                  <mat-select formControlName="reviewerId">
+                    @for (reviewer of reviewers(); track reviewer.id) {
+                      <mat-option [value]="reviewer.id">{{ reviewer.name }}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+                <button mat-flat-button color="primary" type="submit" [disabled]="isAssigning()">
+                  Assign
+                </button>
+              </form>
+            </div>
+          }
+
+          <div class="card risk-history">
+            <h2 class="card-title">Risk history</h2>
+            @if (s.application.riskHistory.length === 0) {
+              <p>No risk events recorded yet.</p>
+            } @else {
+              <ul class="timeline">
+                @for (event of s.application.riskHistory; track event.id) {
+                  <li [class]="'timeline-item decision-' + event.decision.toLowerCase()">
+                    <span class="timeline-date">{{ event.timestamp | date: 'medium' }}</span>
+                    <span class="timeline-decision">{{ event.decision }}</span>
+                    <span class="timeline-reviewer">{{ event.reviewerName }}</span>
+                    <p class="timeline-notes">{{ event.notes }}</p>
+                  </li>
+                }
+              </ul>
+            }
+          </div>
+
+          @if (canDecide(s.application)) {
+            <div class="card decision-card">
+              <h2 class="card-title">Record decision</h2>
+              <form [formGroup]="decisionForm">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Notes</mat-label>
+                  <textarea matInput formControlName="notes" rows="3"></textarea>
+                  @if (decisionForm.controls.notes.touched && decisionForm.controls.notes.invalid) {
+                    <mat-error>Add a short note explaining the decision.</mat-error>
+                  }
+                </mat-form-field>
+                <div class="decision-actions">
+                  <button
+                    mat-flat-button
+                    color="primary"
+                    type="button"
+                    [disabled]="isActingOnDecision()"
+                    (click)="decide(s.application.id, true)"
+                  >
+                    Approve
+                  </button>
+                  <button
+                    mat-stroked-button
+                    color="warn"
+                    type="button"
+                    [disabled]="isActingOnDecision()"
+                    (click)="decide(s.application.id, false)"
+                  >
+                    Reject
+                  </button>
+                </div>
+              </form>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  }
+}

@@ -1,0 +1,33 @@
+<div class="dashboard-page">
+  <header class="dashboard-header">
+    <h1>Dashboard</h1>
+  </header>
+
+  @if (statusCounts()) {
+    @if (quickInfo(); as info) {
+      <a
+        class="card quick-info"
+        [routerLink]="['/applications']"
+        [queryParams]="{ status: info.status }"
+      >
+        <span class="icon">arrow_forward</span>
+        {{ info.message }}
+      </a>
+    }
+
+    <div class="stat-cards">
+      <div class="card stat-card total">
+        <span class="stat-count">{{ total() }}</span>
+        <span class="stat-label">Total applications</span>
+      </div>
+      @for (card of cards(); track card.status) {
+        <div class="card" [class]="statusCardClass(card.status)">
+          <span class="stat-count">{{ card.count }}</span>
+          <span class="stat-label">{{ card.label }}</span>
+        </div>
+      }
+    </div>
+  } @else {
+    <p class="state-message" role="status" aria-live="polite">Loading summary…</p>
+  }
+</div>

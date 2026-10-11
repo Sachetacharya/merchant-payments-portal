@@ -1,0 +1,201 @@
+@if (loadError()) {
+  <p class="state-message error" role="alert">Couldn't load this application. It may not exist or you may not own it.</p>
+} @else {
+  <div class="wizard-header">
+    <button mat-icon-button routerLink="/applications" aria-label="Back to applications" matTooltip="Back to applications (your progress is saved)">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>New merchant application</h1>
+    <span class="save-status" [class]="'save-status-' + saveStatus()" aria-live="polite">
+      @switch (saveStatus()) {
+        @case ('saving') { Saving… }
+        @case ('saved') { Saved }
+        @case ('error') { Couldn't save — retrying on next change }
+        @default { }
+      }
+    </span>
+  </div>
+
+  <form [formGroup]="form">
+    <mat-stepper orientation="horizontal" linear>
+      <mat-step [stepControl]="form.controls.businessInfo" label="Business">
+        <div class="step-fields" formGroupName="businessInfo">
+          <mat-form-field appearance="outline">
+            <mat-label>Legal business name</mat-label>
+            <input matInput formControlName="legalBusinessName" />
+            @if (form.controls.businessInfo.controls.legalBusinessName.touched &&
+                 form.controls.businessInfo.controls.legalBusinessName.invalid) {
+              <mat-error>Required, at least 2 characters.</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Business type</mat-label>
+            <mat-select formControlName="businessType">
+              @for (type of businessTypes; track type) {
+                <mat-option [value]="type">{{ type.replace('_', ' ') }}</mat-option>
+              }
+            </mat-select>
+            @if (form.controls.businessInfo.controls.businessType.touched &&
+                 form.controls.businessInfo.controls.businessType.invalid) {
+              <mat-error>Select a business type.</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Website (optional)</mat-label>
+            <input matInput formControlName="website" placeholder="https://example.com" />
+            @if (form.controls.businessInfo.controls.website.touched &&
+                 form.controls.businessInfo.controls.website.invalid) {
+              <mat-error>Enter a full URL starting with http(s)://</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Registration number</mat-label>
+            <input matInput formControlName="registrationNumber" placeholder="12-3456789" />
+            @if (form.controls.businessInfo.controls.registrationNumber.touched &&
+                 form.controls.businessInfo.controls.registrationNumber.invalid) {
+              <mat-error>Format: 12-3456789</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div class="step-actions">
+          <button mat-flat-button color="primary" matStepperNext type="button">Next</button>
+        </div>
+      </mat-step>
+
+      <mat-step [stepControl]="form.controls.ownerInfo" label="Owner">
+        <div class="step-fields" formGroupName="ownerInfo">
+          <mat-form-field appearance="outline">
+            <mat-label>Owner full name</mat-label>
+            <input matInput formControlName="ownerFullName" />
+            @if (form.controls.ownerInfo.controls.ownerFullName.touched &&
+                 form.controls.ownerInfo.controls.ownerFullName.invalid) {
+              <mat-error>Required.</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Owner email</mat-label>
+            <input matInput type="email" formControlName="ownerEmail" />
+            @if (form.controls.ownerInfo.controls.ownerEmail.touched &&
+                 form.controls.ownerInfo.controls.ownerEmail.invalid) {
+              <mat-error>Enter a valid email.</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Owner phone</mat-label>
+            <input matInput formControlName="ownerPhone" placeholder="555-123-4567" />
+            @if (form.controls.ownerInfo.controls.ownerPhone.touched &&
+                 form.controls.ownerInfo.controls.ownerPhone.invalid) {
+              <mat-error>Required.</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Owner NID</mat-label>
+            <input matInput formControlName="ownerNid" placeholder="222-222-2222" />
+            @if (form.controls.ownerInfo.controls.ownerNid.touched &&
+                 form.controls.ownerInfo.controls.ownerNid.invalid) {
+              <mat-error>Format: 222-222-2222</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div class="step-actions">
+          <button mat-button matStepperPrevious type="button">Back</button>
+          <button mat-flat-button color="primary" matStepperNext type="button">Next</button>
+        </div>
+      </mat-step>
+
+      <mat-step [stepControl]="form.controls.banking" label="Banking">
+        <div class="step-fields" formGroupName="banking">
+          <mat-form-field appearance="outline">
+            <mat-label>Bank name</mat-label>
+            <input matInput formControlName="bankName" />
+            @if (form.controls.banking.controls.bankName.touched &&
+                 form.controls.banking.controls.bankName.invalid) {
+              <mat-error>Required.</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Branch</mat-label>
+            <input matInput formControlName="bankBranch" />
+            @if (form.controls.banking.controls.bankBranch.touched &&
+                 form.controls.banking.controls.bankBranch.invalid) {
+              <mat-error>Required.</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Account number</mat-label>
+            <input matInput formControlName="bankAccountNumber" />
+            @if (form.controls.banking.controls.bankAccountNumber.touched &&
+                 form.controls.banking.controls.bankAccountNumber.invalid) {
+              <mat-error>4–17 digits.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div class="step-actions">
+          <button mat-button matStepperPrevious type="button">Back</button>
+          <button mat-flat-button color="primary" matStepperNext type="button">Next</button>
+        </div>
+      </mat-step>
+
+      <mat-step [stepControl]="form.controls.processingEstimate" label="Processing estimate">
+        <div class="step-fields" formGroupName="processingEstimate">
+          <mat-form-field appearance="outline">
+            <mat-label>Estimated monthly volume (NRs)</mat-label>
+            <input matInput type="number" formControlName="estimatedMonthlyVolume" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Average transaction size</mat-label>
+            <input matInput type="number" formControlName="averageTransactionSize" />
+          </mat-form-field>
+        </div>
+
+        <div class="step-actions">
+          <button mat-button matStepperPrevious type="button">Back</button>
+          <button mat-flat-button color="primary" matStepperNext type="button">Next</button>
+        </div>
+      </mat-step>
+
+      <mat-step label="Review & submit">
+        <div class="review">
+          @if (applicationStatus() === 'DRAFT') {
+            <p>Review your answers, then submit for underwriting review.</p>
+            @if (form.invalid) {
+              <p class="field-error">Some fields still need attention — go back and fix them before submitting.</p>
+            }
+          } @else {
+            <p>
+              This application was already submitted and is waiting for review. Your edits here are saved
+              automatically — there's no need to submit again.
+            </p>
+          }
+        </div>
+
+        <div class="step-actions">
+          <button mat-button matStepperPrevious type="button">Back</button>
+          @if (applicationStatus() === 'DRAFT') {
+            <button
+              mat-flat-button
+              color="primary"
+              type="button"
+              [disabled]="form.invalid || isSubmitting()"
+              (click)="submit()"
+            >
+              Submit application
+            </button>
+          }
+        </div>
+      </mat-step>
+    </mat-stepper>
+  </form>
+}

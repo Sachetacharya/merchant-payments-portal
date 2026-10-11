@@ -1,0 +1,19 @@
+<div class="masked-field">
+  <span class="masked-field-label">{{ label() }}</span>
+  <span class="masked-field-value" [class.is-revealed]="isShowingReal()">
+    {{ displayValue() || '—' }}
+  </span>
+  @if (canReveal()) {
+    <button
+      mat-icon-button
+      type="button"
+      class="reveal-toggle"
+      [matTooltip]="isShowingReal() ? 'Hide' : 'Reveal — this is logged'"
+      [attr.aria-label]="isShowingReal() ? 'Hide ' + label() : 'Reveal ' + label()"
+      [disabled]="isRevealing()"
+      (click)="toggle()"
+    >
+      <mat-icon>{{ isShowingReal() ? 'visibility_off' : 'visibility' }}</mat-icon>
+    </button>
+  }
+</div>
