@@ -154,7 +154,7 @@ describe('ApplicationsListPage', () => {
   });
 
   describe('navigation', () => {
-    it('openApplication routes to the edit wizard for an editable application, detail otherwise', () => {
+    it('openApplication routes to the edit form for an editable application, detail otherwise', () => {
       const router = TestBed.inject(Router);
       const navigateSpy = vi.spyOn(router, 'navigate').mockResolvedValue(true);
       role.set(Role.Sales);

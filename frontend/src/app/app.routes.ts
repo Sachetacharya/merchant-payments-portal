@@ -40,8 +40,8 @@ export const routes: Routes = [
         canMatch: [authMatchGuard],
         data: { roles: [Role.Sales] },
         loadComponent: () =>
-          import('./features/application-wizard/application-wizard-page/application-wizard-page').then(
-            (m) => m.ApplicationWizardPage,
+          import('./features/application-form/application-form-page/application-form-page').then(
+            (m) => m.ApplicationFormPage,
           ),
       },
       {
@@ -49,8 +49,8 @@ export const routes: Routes = [
         canMatch: [authMatchGuard],
         data: { roles: [Role.Sales] },
         loadComponent: () =>
-          import('./features/application-wizard/application-wizard-page/application-wizard-page').then(
-            (m) => m.ApplicationWizardPage,
+          import('./features/application-form/application-form-page/application-form-page').then(
+            (m) => m.ApplicationFormPage,
           ),
       },
       {

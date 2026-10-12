@@ -3,7 +3,7 @@ import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { ApplicationsApi } from '../../../core/applications/applications-api';
 import { Application } from '../../../core/applications/application.model';
-import { ApplicationWizardPage } from './application-wizard-page';
+import { ApplicationFormPage } from './application-form-page';
 
 function makeApplication(overrides: Partial<Application> = {}): Application {
   return {
@@ -20,13 +20,13 @@ function makeApplication(overrides: Partial<Application> = {}): Application {
   };
 }
 
-describe('ApplicationWizardPage', () => {
+describe('ApplicationFormPage', () => {
   let api: { create: ReturnType<typeof vi.fn>; getById: ReturnType<typeof vi.fn>; update: ReturnType<typeof vi.fn>; submit: ReturnType<typeof vi.fn> };
   let navigateSpy: ReturnType<typeof vi.fn>;
 
-  function createComponent(routeId: string | null): ComponentFixture<ApplicationWizardPage> {
+  function createComponent(routeId: string | null): ComponentFixture<ApplicationFormPage> {
     TestBed.configureTestingModule({
-      imports: [ApplicationWizardPage],
+      imports: [ApplicationFormPage],
       providers: [
         { provide: ApplicationsApi, useValue: api },
         { provide: Router, useValue: { navigate: navigateSpy } },
@@ -36,7 +36,7 @@ describe('ApplicationWizardPage', () => {
         },
       ],
     });
-    const fixture = TestBed.createComponent(ApplicationWizardPage);
+    const fixture = TestBed.createComponent(ApplicationFormPage);
     fixture.detectChanges();
     return fixture;
   }

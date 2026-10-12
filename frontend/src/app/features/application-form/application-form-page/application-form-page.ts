@@ -24,7 +24,7 @@ const BUSINESS_TYPES: BusinessType[] = ['LLC', 'CORPORATION', 'SOLE_PROPRIETOR',
 const LOCAL_DRAFT_PREFIX = 'merchant-portal.draft.';
 
 @Component({
-  selector: 'app-application-wizard-page',
+  selector: 'app-application-form-page',
   imports: [
     ReactiveFormsModule,
     RouterLink,
@@ -36,11 +36,11 @@ const LOCAL_DRAFT_PREFIX = 'merchant-portal.draft.';
     MatStepperModule,
     MatTooltipModule,
   ],
-  templateUrl: './application-wizard-page.html',
-  styleUrl: './application-wizard-page.scss',
+  templateUrl: './application-form-page.html',
+  styleUrl: './application-form-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ApplicationWizardPage implements OnInit {
+export class ApplicationFormPage implements OnInit {
   private readonly api = inject(ApplicationsApi);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
